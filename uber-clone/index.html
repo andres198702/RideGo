@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RideGo — Solicita tu viaje</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Sidebar: panel de búsqueda y resultados -->
+  <aside class="sidebar">
+    <header class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+          <path d="M12 2 2 7v10l10 5 10-5V7L12 2zm0 2.3 7.5 3.7L12 11.7 4.5 8 12 4.3zM4 9.6l7 3.5v7.3l-7-3.5V9.6zm16 7.3-7 3.5V13.1l7-3.5v7.3z"/>
+        </svg>
+        <span>RideGo</span>
+      </div>
+      <p class="tagline">Tu viaje, en segundos</p>
+    </header>
+
+    <!-- Formulario de búsqueda -->
+    <section class="search-section">
+      <div class="input-group">
+        <span class="input-dot origin"></span>
+        <input
+          type="text"
+          id="originInput"
+          placeholder="¿Desde dónde sales?"
+          autocomplete="off"
+        />
+        <button type="button" id="locateBtn" class="locate-btn" title="Usar mi ubicación actual">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+          </svg>
+        </button>
+        <ul class="autocomplete-list" id="originSuggestions"></ul>
+      </div>
+
+      <div class="input-group">
+        <span class="input-dot destination"></span>
+        <input
+          type="text"
+          id="destinationInput"
+          placeholder="¿A dónde vas?"
+          autocomplete="off"
+        />
+        <ul class="autocomplete-list" id="destinationSuggestions"></ul>
+      </div>
+
+      <button id="searchBtn" class="btn-primary" disabled>
+        Buscar ruta
+      </button>
+    </section>
+
+    <!-- Panel de resultados -->
+    <section class="results-section" id="resultsSection" hidden>
+      <!-- Info de la ruta -->
+      <div class="route-summary" id="routeSummary">
+        <div class="summary-item">
+          <span class="summary-label">Distancia</span>
+          <span class="summary-value" id="routeDistance">—</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Duración</span>
+          <span class="summary-value" id="routeDuration">—</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Llega en</span>
+          <span class="summary-value" id="driverEta">—</span>
+        </div>
+        <div class="summary-item summary-perkm">
+          <span class="summary-label">Tarifa por km</span>
+          <span class="summary-value" id="routePerKm">—</span>
+        </div>
+      </div>
+
+      <!-- Opciones de viaje -->
+      <h3 class="section-title">Elige tu viaje</h3>
+      <ul class="ride-options" id="rideOptions"></ul>
+
+      <!-- Ofertas de conductores (bidding) -->
+      <h3 class="section-title" id="offersTitle" hidden>
+        Conductores te ofrecieron llevarte
+      </h3>
+      <ul class="driver-offers" id="driverOffersList"></ul>
+
+      <!-- Tu oferta -->
+      <div class="offer-section">
+        <h3 class="section-title">Tu oferta</h3>
+        <p class="offer-hint" id="offerHint">—</p>
+        <div class="offer-input-wrap">
+          <span class="offer-currency">$</span>
+          <input
+            type="number"
+            id="offerInput"
+            inputmode="numeric"
+            min="0"
+            step="500"
+            placeholder="Ingresa tu oferta"
+          />
+          <span class="offer-cop">COP</span>
+        </div>
+        <p class="offer-feedback" id="offerFeedback"></p>
+      </div>
+
+      <button id="requestBtn" class="btn-primary" disabled>
+        Solicitar viaje
+      </button>
+    </section>
+
+    <!-- Estado de la solicitud -->
+    <section class="ride-status" id="rideStatus" hidden>
+      <div class="status-spinner"></div>
+      <h3 id="statusTitle">Buscando conductor...</h3>
+      <p id="statusMessage">Estamos conectándote con el conductor más cercano.</p>
+      <button id="cancelBtn" class="btn-secondary">Cancelar</button>
+    </section>
+  </aside>
+
+  <!-- Mapa -->
+  <main class="map-container">
+    <div id="map"></div>
+    <div class="api-indicator" id="apiIndicator">
+      <span class="pulse"></span>
+      <span id="apiStatus">Listo</span>
+    </div>
+  </main>
+
+  <!-- Log de llamadas API (para demo del reto) -->
+  <div class="api-log" id="apiLog">
+    <header class="log-header">
+      <h4>Registro de APIs</h4>
+      <button id="toggleLog" class="log-toggle">—</button>
+    </header>
+    <ul class="log-list" id="logList"></ul>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="mock-api.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
