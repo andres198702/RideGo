@@ -35,6 +35,11 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
 }).addTo(map);
 
+// Redibuja los tiles cuando cambia el tamaño (rotación de móvil, resize, etc.)
+const invalidate = () => map.invalidateSize();
+window.addEventListener("resize", invalidate);
+window.addEventListener("orientationchange", () => setTimeout(invalidate, 250));
+
 // ---------- Referencias al DOM ----------
 const $ = (id) => document.getElementById(id);
 const originInput = $("originInput");
